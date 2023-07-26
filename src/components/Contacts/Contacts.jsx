@@ -7,11 +7,11 @@ export const Contacts = ({ contacts, filterTerm, onClick }) => {
       {contacts
         .filter(i => i.name.includes(filterTerm))
         .map(item => {
-          const { name, id, number } = item;
+          const { name, id, phone } = item;
           return (
             <li key={id} className={style.contacts_item}>
               <p className={style.contacts_info}>
-                {name} : {number}
+                {name} : {phone}
               </p>
               <button
                 className={style.contacts_btn}

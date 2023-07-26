@@ -2,8 +2,7 @@ import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
 import style from './Phonebook.module.css';
 
-export const Phonebook = ({onSubmit}) => {
-
+export const Phonebook = ({ onSubmit }) => {
   return (
     <div>
       <form onSubmit={onSubmit} className={style.form}>
@@ -15,7 +14,7 @@ export const Phonebook = ({onSubmit}) => {
             name="name"
             pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
             title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-            placeholder='Roboute Guliman'
+            placeholder="Roboute Guliman"
             required
           />
         </label>
@@ -30,12 +29,14 @@ export const Phonebook = ({onSubmit}) => {
             required
           />
         </label>
-        <button className={style.btn} type="submit">Add contact</button>
+        <button className={style.btn} type="submit">
+          Add contact
+        </button>
       </form>
     </div>
   );
 };
 
 Phonebook.propTypes = {
-  onSubmit: PropTypes.func
-}
+  onSubmit: PropTypes.func,
+};

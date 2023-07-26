@@ -1,31 +1,43 @@
 import { Phonebook } from './Phonebook/Phonebook';
 import { Contacts } from './Contacts/Contacts';
 import { Filter } from './Filter/Filter';
-import { nanoid } from 'nanoid';
 import { useDispatch, useSelector } from 'react-redux';
-import { addContact, deleteContact } from 'redux/contactSlice';
 import { setFilterValue } from 'redux/filterSlice';
+import {
+  selectContacts,
+  selectError,
+  selectFilter,
+  selectIsLoading,
+} from 'redux/selectors';
+import { addContact, deleteContact, fetchContacts } from '../redux/API';
+import { useEffect } from 'react';
+import { Circles } from 'react-loader-spinner';
 
 export const App = () => {
   const dispatch = useDispatch();
-  const contactsArray = useSelector(state => state.contacts);
-  const filterTerm = useSelector(state => state.filter);
+  const contacts = useSelector(selectContacts);
+  const filterTerm = useSelector(selectFilter);
+  const error = useSelector(selectError);
+  const isLoading = useSelector(selectIsLoading);
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   const handleSubmitForm = e => {
     e.preventDefault();
     const contactName = e.target.elements.name.value;
     const contactNumber = e.target.elements.number.value;
     const newContact = {
-      id: nanoid(),
       name: contactName,
-      number: contactNumber,
+      phone: contactNumber,
     };
+    dispatch(addContact(newContact));
 
-    if (contactsArray.contactsArray.some(i => i.name === contactName)) {
+    if (contacts.some(i => i.name === contactName)) {
       alert(`You alraeady have a ${contactName} in contacts`);
       return;
     }
-    dispatch(addContact(newContact));
+    e.target.reset();
   };
 
   const filterValue = e => {
@@ -52,8 +64,19 @@ export const App = () => {
 
       <h2>Contacts</h2>
       <Filter filter={filterTerm} onChange={filterValue} />
+      {isLoading && !error && (
+        <Circles
+          height="80"
+          width="80"
+          color="#4fa94d"
+          ariaLabel="circles-loading"
+          wrapperStyle={{}}
+          wrapperClass=""
+          visible={true}
+        />
+      )}
       <Contacts
-        contacts={contactsArray.contactsArray}
+        contacts={contacts}
         filterTerm={filterTerm}
         onClick={handleDeleteContact}
       />
